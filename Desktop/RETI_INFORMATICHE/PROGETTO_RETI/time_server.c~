@@ -1,0 +1,85 @@
+#include <arpa/inet.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <time.h>
+
+#define MAX_CLIENTS     10
+#define BUF_LEN         1024
+#define POLLING_TIME    5
+#define REQUEST_LEN    4  // REQ\0
+
+
+int main(int argc, char* argv[]){
+    int ret, sd, len, addrlen, num_client = 0, i; 
+    
+    struct sockaddr_in my_addr, connecting_addr;
+    char buffer[BUF_LEN];
+    
+    time_t rawtime;
+    
+    struct sockaddr_in cl_addr[MAX_CLIENTS];
+    
+    
+    /* Creazione socket */
+    sd = socket(AF_INET,SOCK_DGRAM|SOCK_NONBLOCK,0);
+    
+    /* Creazione indirizzo di bind */
+    memset(&my_addr, 0, sizeof(my_addr)); // Pulizia 
+    my_addr.sin_family = AF_INET;
+    my_addr.sin_port = htons(4242);
+    my_addr.sin_addr.s_addr = INADDR_ANY;
+    
+    ret = bind(sd, (struct sockaddr*)&my_addr, sizeof(my_addr) );
+    
+    if( ret < 0 ){
+        perror("Bind non riuscita\n");
+        exit(0);
+    }
+    
+    while(1){
+        
+        // Aspetto richieste di connessione
+        do{
+            ret = recvfrom(sd, buffer, BUF_LEN, 0,
+                   (struct sockaddr*)&connecting_addr, &addrlen);
+            if(ret < 0)
+                sleep(POLLING_TIME);
+        } while(ret < 0);
+		
+        // Aggiungo il nuovo client alla lista delle connessioni
+        cl_addr[num_client] = connecting_addr;
+        ++num_client;
+        
+        // Recupero l'ora corrente
+        time(&rawtime);
+        sprintf(buffer, "%s", ctime(&rawtime)); // sprintf aggiunge automaticamente \0
+        len = strlen(buffer) + 1;
+        
+        // Notifico i clients registrati
+        for(i = 0; i < num_client; ++i){
+            do{
+                ret = sendto(sd, buffer, len, 0,
+                    (struct sockaddr*)&cl_addr[i], sizeof(cl_addr[i]));
+                                
+                if(ret < 0){
+                    sleep(POLLING_TIME);
+					printf("receive fallita\n");
+				}
+            } while(ret < 0);
+
+        }
+        
+    }
+    
+    close(sd);
+    
+}
+    
+    
+    
+    
