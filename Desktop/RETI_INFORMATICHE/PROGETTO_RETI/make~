@@ -1,9 +1,0 @@
-
-CFLAGS = -Wall
-
-s: server.o
-	$(CC) $(CFLAGS) server.o -o server
-
-server.o: server.c
-	$(CC) $(CFLAGS) -c server.c
-	 

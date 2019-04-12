@@ -2,7 +2,7 @@
 CFLAGS = -Wall
 
 server: server.o
-	$(CC)  server.o -o -lpthread server
+	$(CC)  server.o -lpthread -o server
 
 server.o: server.c
 	$(CC) $(CFLAGS) -c server.c -lpthread

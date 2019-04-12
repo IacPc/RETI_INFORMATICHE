@@ -18,3 +18,5 @@ client.o: client.c
 	 
 clean:
 	rm *.o
+
+
