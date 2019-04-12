@@ -22,11 +22,7 @@ int main(int argc, char* argv[]){
     /* Creazione indirizzo di bind */
 	strncpy(ip_ser,argv[1],4);
 	strncpy(porta,argv[2],4);
-/*
-    memset(&my_addr, 0, sizeof(my_addr)); 
-    my_addr.sin_family = AF_INET;
-    my_addr.sin_port = htons(atoi(porta));
-    my_addr.sin_addr.s_addr = INADDR_ANY;*/
+
  
        
     /* Creazione indirizzo del server */

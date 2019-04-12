@@ -12,7 +12,7 @@ struct arg_get{
 int get(struct arg_get* ag){
 
 	int ret;
-	int bn;
+	int bn=0;
 	int tot=0;
 	uint16_t opc;
 	socklen_t addrlen= sizeof(ag->srv_addr);
