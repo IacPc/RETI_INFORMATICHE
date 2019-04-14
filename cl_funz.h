@@ -6,6 +6,7 @@ struct arg_get{
 	struct sockaddr_in srv_addr;
 	int sd;
 	char file[32];
+	char nome[32];
 };
 
 
@@ -41,13 +42,14 @@ int get(struct arg_get* ag){
 
 	ret = sendto(ag->sd, buf, R_WRQ_SIZE, 0,
             (struct sockaddr*)&ag->srv_addr, sizeof(ag->srv_addr));
-	if(ret==-1)
+	if(ret==-1){
+		printf("errore invio richiesta al server\n");
 		return -1;
-
+	}
 	printf("richiesta al server inviata\n");
 	//ASPETTO IL PACCHETTO DATI
 	strcpy(percorso,"/home/iacopo/Desktop/RETI_INFORMATICHE/PROGETTO_RETI/scaricati/");
-	strcat(percorso,ag->file);
+	strcat(percorso,ag->nome);
 
 
 	while(1){
@@ -62,13 +64,11 @@ int get(struct arg_get* ag){
 		
 
 		if(opc==DATA_OPC){
-			printf("deserializza pacchetto Dati\n");
-			//alloco un buffer che contenga tutti i dati ricevuti
 			
 			deserializza_Data_pkt(buf,&dp,ret);
 
 
-			printf("pacchetto dati deserializzato\n");			
+			printf("creazione file %s\n",percorso);			
 			if(!fptr)
 				fptr = fopen(percorso, "a");
 				
@@ -108,7 +108,6 @@ int get(struct arg_get* ag){
 
 	}
 	fine:
-	close(ag->sd);
 	free(dp.Data);
 	return tot;
 }

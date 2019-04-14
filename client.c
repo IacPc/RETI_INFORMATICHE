@@ -8,10 +8,9 @@ int main(int argc, char* argv[]){
     int sd;
 	char ip_ser[4];
 	char porta[4];	
-	char file[32];	
 	char comando1[6];
 	char comando2[32];
-	char comadno3[32];
+	char comando3[32];
 	int tot=0;
 	
     struct sockaddr_in srv_addr;// my_addr;
@@ -33,27 +32,57 @@ int main(int argc, char* argv[]){
     srv_addr.sin_port = htons(atoi(porta));
     inet_pton(AF_INET, ip_ser, &srv_addr.sin_addr);
 
-
-	printf("sono disponibili i seguenti comandi:\n");
-	printf("!help --> mostra l'elenco dei comandi disponibili\n");
-	printf("!mode{txt|bin} --> impposta il modo di trasferimento dei files (testo o binario)\n");
-	printf("!get filename nome_locale --> richiede al server il nome del <filenamme> e lo salva localment con il nome <nome_locale>\n");
-
-	printf("!quit --> termina il client\n");
+	printf("digitare help per i comandi disponibili:\n");
 
 	while(1){
-		scanf("%s %s %s",comando1,comando2,comando3);
+		scanf("%s",comando1);
 		
-		switch(comando1)
-		case("!get"):
-		strcpy(file,"copione.txt\0");
-		strcpy(ag.mode,"txt\0");
-		ag.srv_addr= srv_addr;	
-		ag.sd=sd;
-		strcpy(ag.file,file);
-		tot =get(&ag);
-		printf("scaricati %d byte\n",tot);
-		break
 
+		if(strcmp(comando1,"!get")==0){
+			scanf("%s %s",comando2,comando3);
+			ag.srv_addr= srv_addr;	
+			ag.sd=sd;
+			strcpy(ag.file,comando2);
+			if(strlen(comando3)<=1)
+				strcpy(ag.nome,comando2);
+			else
+				strcpy(ag.nome,comando3);	
+
+			tot =get(&ag);	
+		
+			printf("scaricati %d byte\n",tot);
+			continue;
+		}
+
+		if(strcmp(comando1,"!mode")==0){
+			scanf("%s",comando2);
+			if(strcmp(comando2,"txt")==0 || strcmp(comando2,"bin")==0){
+				strcpy(ag.mode,comando2);
+				printf("Modo di trasferimento %s impostato\n",comando2);
+			}else
+				printf("Modo di trasferimento errato \n");
+			continue;
+		}
+		
+		if(strcmp(comando1,"!help")==0){
+
+			printf("sono disponibili i seguenti comandi:\n");
+
+			printf("!help --> mostra l'elenco dei comandi disponibili\n");
+
+			printf("!mode{txt|bin} --> imposta il modo di trasferimento dei files (testo o binario)\n");
+			printf("!get filename nome_locale --> richiede al server il nome del <filename> e lo salva localment con il nome <nome_locale>\n");
+
+			printf("!quit --> termina il client\n");
+
+
+		}
+
+		if(strcmp(comando1,"!quit")==0)
+			break;
+
+		printf("comando non valido riprovare\n");
+		
 	}
+	close(sd);
 }
