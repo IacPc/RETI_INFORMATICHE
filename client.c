@@ -74,8 +74,8 @@ int main(int argc, char* argv[]){
 			printf("!get filename nome_locale --> richiede al server il nome del <filename> e lo salva localment con il nome <nome_locale>\n");
 
 			printf("!quit --> termina il client\n");
-
-
+			continue;
+		
 		}
 
 		if(strcmp(comando1,"!quit")==0)

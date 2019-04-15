@@ -32,13 +32,7 @@ int main(int argc, char* argv[]){
     srv_addr.sin_port = htons(atoi(porta));
     inet_pton(AF_INET, ip_ser, &srv_addr.sin_addr);
 
-
-	printf("sono disponibili i seguenti comandi:\n");
-	printf("!help --> mostra l'elenco dei comandi disponibili\n");
-	printf("!mode{txt|bin} --> imposta il modo di trasferimento dei files (testo o binario)\n");
-	printf("!get filename nome_locale --> richiede al server il nome del <filename> e lo salva localment con il nome <nome_locale>\n");
-
-	printf("!quit --> termina il client\n");
+	printf("digitare help per i comandi disponibili:\n");
 
 	while(1){
 		scanf("%s",comando1);
@@ -72,6 +66,14 @@ int main(int argc, char* argv[]){
 		
 		if(strcmp(comando1,"!help")==0){
 
+			printf("sono disponibili i seguenti comandi:\n");
+
+			printf("!help --> mostra l'elenco dei comandi disponibili\n");
+
+			printf("!mode{txt|bin} --> imposta il modo di trasferimento dei files (testo o binario)\n");
+			printf("!get filename nome_locale --> richiede al server il nome del <filename> e lo salva localment con il nome <nome_locale>\n");
+
+			printf("!quit --> termina il client\n");
 
 
 		}
