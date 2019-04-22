@@ -23,7 +23,7 @@ void* routine_mt(void* a){
 	char buf_dest[100];
 
 	int curs =0;
-	int nb=1;
+	int nb=0;
 	int ns;
 	int len;
 	bool ultimo=0;
