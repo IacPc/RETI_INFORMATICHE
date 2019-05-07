@@ -95,7 +95,6 @@ int main(int argc, char** argv){
 
 				sendto(sd, buf_rq,ret, 0,
 						(struct sockaddr*)&cl_addr,sizeof(cl_addr));
-	    		printf("Doc non trovato,inviato pacchetto errore di %d byte\n",ret);
 			break;
 		}
 	}

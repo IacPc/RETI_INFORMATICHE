@@ -13,7 +13,7 @@ struct arg_get{
 int get(struct arg_get* ag){
 
 	int ret;
-	int bn=0;
+	int bn=1;
 	int tot=0;
 	uint16_t opc;
 	socklen_t addrlen= sizeof(ag->srv_addr);
@@ -68,7 +68,6 @@ int get(struct arg_get* ag){
 			deserializza_Data_pkt(buf,&dp,ret);
 
 
-			printf("creazione file %s\n",percorso);			
 			if(!fptr)
 				fptr = fopen(percorso, "w");
 				
