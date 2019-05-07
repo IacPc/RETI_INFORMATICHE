@@ -22,8 +22,19 @@ int main(int argc, char** argv){
 
     // Creazione socket 
     sd = socket(AF_INET, SOCK_DGRAM, 0);
-	
-	pid=atoi(argv[1]);
+	pid=69;
+	if(argc<3){
+		if(argc==2)
+			pid=atoi(argv[1]);
+		strcpy(percorso,"/home/iacopo/Desktop/RETI_INFORMATICHE/PROGETTO_RETI/esempi/\0");
+	}
+	else{
+		pid=atoi(argv[1]);
+		strcpy(percorso,(char*)(argv[2]));
+	}
+
+	if(pid==69)
+		printf("attenzione,il server è in ascolto sulla porta 69 potrebbero essere necessari permessi di superutente\n");
 
     // Creazione indirizzo di bind 
     memset(&cl_addr, 0, sizeof(cl_addr));  
@@ -44,7 +55,7 @@ int main(int argc, char** argv){
 
     addrlen = sizeof(cl_addr);
 
-	strcpy(percorso,(char*)(argv[2]));
+
 
 
     while(1){
@@ -101,4 +112,4 @@ int main(int argc, char** argv){
 
 }
 
-	 /**/
+
