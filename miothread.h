@@ -25,7 +25,7 @@ void* routine_mt(void* a){
 	int curs =0;
 	int nb=1;
 	int ns;
-	int len;
+	int len=0;
 	bool ultimo=0;
 
 	socklen_t addrlen;
@@ -72,16 +72,33 @@ void* routine_mt(void* a){
 
 
 		int i=0;
-		for (;i<512;i++){
-			fseek(fptr,curs,SEEK_SET);
-			buf_d[i]=(char)fgetc(fptr);
-			curs++;
-			if(buf_d[i]==EOF){
-				ultimo = 1;
-				break;
+		printf("modalità=%s\n",rw.mode);
+		if (strcmp(rw.mode,"netascii")==0){
+			printf("inizio trasf. testuale\n");
+			for (;i<512;i++){
+				fseek(fptr,curs,SEEK_SET);
+				buf_d[i]=(char)fgetc(fptr);
+				curs++;
+				if(buf_d[i]==EOF){
+					ultimo = 1;
+					break;
+				}
 			}
 		}
-		
+		printf("i=%d\n",i);
+
+		if (strcmp(rw.mode,"octet")==0){
+			printf("inizio trasf. binario\n");
+			for (;i<512;i++){
+				fseek(fptr,curs,SEEK_SET);
+				len=fread(&buf_d[i],1,1,fptr);
+				curs++;
+				if(len!=1){
+					ultimo = 1;
+					break;
+				}
+			}
+		}
 		dp.Opcode= DATA_OPC;
 
 		memcpy(dp.Data,buf_d,i);

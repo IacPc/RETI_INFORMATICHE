@@ -52,7 +52,8 @@ void  deserializza_R_Wrq_pkt(char* buf,struct R_Wrq_pkt* rw){
 		
 	j++;
 	strcpy(rw->mode,&buf[j]);
-
+/*	for(int i =0;buf[j]!='\0';i++,j++)
+		rw->mode[i]=buf[j];*/
 
 }
 

@@ -2,7 +2,7 @@
 
 struct arg_get{
 
-	char mode[4];
+	char mode[9];
 	struct sockaddr_in srv_addr;
 	int sd;
 	char file[32];
@@ -31,12 +31,14 @@ int get(struct arg_get* ag){
 
 	rw.Opcode = RRQ_OPC;
 	strcpy(rw.filename,ag->file);
+	printf("ag->mode=%s\n",ag->mode);//qui è a modo
 	strcpy(rw.mode,ag->mode);
+
 	dp.Data = (char*)malloc(512);
 	if(!dp.Data)
 		exit(0); 
 
-	serializza_R_Wrq_pkt(buf,&rw);
+	serializza_R_Wrq_pkt(buf,&rw);//<---
 
 	printf("invio richiesta al server\n");
 

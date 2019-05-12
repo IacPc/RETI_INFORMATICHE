@@ -60,7 +60,7 @@ int main(int argc, char** argv){
 
     while(1){
 
-		ret = recvfrom(sd, &buf_rq[0], 512, 0,
+		ret = recvfrom(sd, &buf_rq[0], 128, 0,
 							   (struct sockaddr*)&cl_addr, &addrlen);
 		if(ret==-1){
 			printf("errore receive\n");
