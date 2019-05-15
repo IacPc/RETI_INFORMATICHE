@@ -31,19 +31,20 @@ int get(struct arg_get* ag){
 
 	rw.Opcode = RRQ_OPC;
 	strcpy(rw.filename,ag->file);
-	printf("ag->mode=%s\n",ag->mode);//qui è a modo
+	printf("ag->mode=%s\n",ag->mode);
 	strcpy(rw.mode,ag->mode);
 
 	dp.Data = (char*)malloc(512);
 	if(!dp.Data)
 		exit(0); 
 
-	serializza_R_Wrq_pkt(buf,&rw);//<---
+
+	serializza_R_Wrq_pkt(buf,&rw);
 
 	printf("invio richiesta al server\n");
 
-	ret = sendto(ag->sd, buf, R_WRQ_SIZE, 0,
-            (struct sockaddr*)&ag->srv_addr, sizeof(ag->srv_addr));
+	ret = sendto(ag->sd, buf, R_WRQ_SIZE, 0,(struct sockaddr*)&ag->srv_addr,
+																sizeof(ag->srv_addr));
 	if(ret==-1){
 		printf("errore invio richiesta al server\n");
 		return -1;

@@ -72,7 +72,7 @@ void* routine_mt(void* a){
 
 
 		int i=0;
-		printf("modalità=%s\n",rw.mode);
+
 		if (strcmp(rw.mode,"netascii")==0){
 			printf("inizio trasf. testuale\n");
 			for (;i<512;i++){
@@ -85,7 +85,6 @@ void* routine_mt(void* a){
 				}
 			}
 		}
-		printf("i=%d\n",i);
 
 		if (strcmp(rw.mode,"octet")==0){
 			printf("inizio trasf. binario\n");
@@ -93,12 +92,13 @@ void* routine_mt(void* a){
 				fseek(fptr,curs,SEEK_SET);
 				len=fread(&buf_d[i],1,1,fptr);
 				curs++;
-				if(len!=1){
+				if(len==0){
 					ultimo = 1;
 					break;
 				}
 			}
 		}
+
 		dp.Opcode= DATA_OPC;
 
 		memcpy(dp.Data,buf_d,i);

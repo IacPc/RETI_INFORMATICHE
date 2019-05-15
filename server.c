@@ -36,7 +36,7 @@ int main(int argc, char** argv){
 	if(pid==69)
 		printf("attenzione,il server è in ascolto sulla porta 69 potrebbero essere necessari permessi di superutente\n");
 
-    // Creazione indirizzo di bind 
+
     memset(&cl_addr, 0, sizeof(cl_addr));  
     memset(&my_addr, 0, sizeof(my_addr));  
     my_addr.sin_family = AF_INET;
@@ -90,10 +90,9 @@ int main(int argc, char** argv){
 				if(pid!=0){
 					printf("errore thread\n");
 					exit(0);
-				}else{
-					printf("successo thread\n");
-					
 				}
+					
+				
 
 			break;
 

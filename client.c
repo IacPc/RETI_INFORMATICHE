@@ -43,10 +43,7 @@ int main(int argc, char* argv[]){
 			ag.srv_addr= srv_addr;	
 			ag.sd=sd;
 			strcpy(ag.file,comando2);
-			/*if(strlen(comando3)<=1)
-				strcpy(ag.nome,comando2);
-			else*/
-				strcpy(ag.nome,comando3);	
+			strcpy(ag.nome,comando3);	
 
 			tot =get(&ag);	
 		
@@ -58,13 +55,13 @@ int main(int argc, char* argv[]){
 			scanf("%s",comando2);
 
 			if (strcmp(comando2,"bin")==0){
-				strcpy(ag.mode,"octet");
+				strcpy(ag.mode,"octet\0");
 				printf("Modo di trasferimento %s impostato\n",ag.mode);
 				continue;
 			}
 
 			if (strcmp(comando2,"txt")==0){
-				strcpy(ag.mode,"netascii");
+				strcpy(ag.mode,"netascii\0");
 				printf("Modo di trasferimento %s impostato\n",ag.mode);
 				continue;
 			}

@@ -32,28 +32,35 @@ void  serializza_R_Wrq_pkt(char* buf,struct R_Wrq_pkt* rw){
 		strcpy(&buf[2],rw->filename);
 
 		//next=primo indice libero dopo aver copiato il nome del file
-		int next = 2+strlen(rw->filename)+1;
-		//
-		//next++;
+		//alla lunghezza di filename va aggiunto 1 perchè strlen
+		//non include il fine stringa 
+		int next = 2+(strlen(rw->filename)+1);
+		
+		buf[next] = 0X00;		
+		
+		next++;		
+
 		strcpy(&buf[next],rw->mode);
-		/*next +=strlen(rw->mode);
-		buf[next] ='\0';*/
-};
+		next = next+(strlen(rw->mode)+1)+1;
+
+		buf[next] =0x00;
+}
 
 void  deserializza_R_Wrq_pkt(char* buf,struct R_Wrq_pkt* rw){
-	
+	int next;	
+
 	memcpy(&rw->Opcode,buf,2);
+	
+	strcpy(rw->filename,&buf[2]);
+	
+	//next = inizio stringa mode(txt o bin)
+	//pos inizio filename  lung filename + \0	byte a 0X00
+	//     |						|				|
+	//	   V						V				V
+	next = 2 	+		(strlen(rw->filename)+1) +  1;
 
-
-	int j=2;
-
-	for(int i=0;buf[j]!='\0';i++,j++)
-			rw->filename[i]=buf[j];
-		
-	j++;
-	strcpy(rw->mode,&buf[j]);
-
-
+	strcpy(rw->mode,&buf[next]);
+	printf("rw->mode = %s\n",rw->mode);
 }
 
 struct Data_pkt{
