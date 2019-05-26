@@ -86,7 +86,6 @@ int main(int argc, char** argv){
 				printf("ricevuta richiesta di lettura File system\n");
 				
 				//inizializzo argomenti da passare al thread
-				//struttura arg definita in miothread.h
 				arg = (struct arg_mt*)malloc(sizeof(struct arg_mt));	
 				memcpy(arg->buf_rq,buf_rq,R_WRQ_SIZE);					
 				arg->cl_addr=cl_addr;

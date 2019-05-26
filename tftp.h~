@@ -188,7 +188,7 @@ void deserializza_err_pkt(struct Err_pkt* er,char* buf){
 	er->Err_Numb = nh;
 	
 	int i;
-	for(i=0;buf[i+4]!=0X00;i++)
+	for(i=0;buf[i+4]!='0';i++)
 		er->Err_Msg[i]=buf[i+4];
 	
 	

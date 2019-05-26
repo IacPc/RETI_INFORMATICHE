@@ -26,8 +26,8 @@ int main(int argc, char* argv[]){
 
  
        
-    // Creazione indirizzo del server 
-    memset(&srv_addr, 0, sizeof(srv_addr));  
+    /* Creazione indirizzo del server */
+    memset(&srv_addr, 0, sizeof(srv_addr)); // Pulizia 
     srv_addr.sin_family = AF_INET;
     srv_addr.sin_port = htons(atoi(porta));
     inet_pton(AF_INET, ip_ser, &srv_addr.sin_addr);
