@@ -71,7 +71,7 @@ void* routine_mt(void* a){
     }		
 
 
-	dp.Data =(char*)malloc(DATA_P_FULL);
+	dp.Data =(char*)malloc(516);
 
 	while(1){
 

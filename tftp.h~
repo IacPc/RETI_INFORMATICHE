@@ -14,7 +14,6 @@
 #define ERR_OPC 	0x0005
 #define R_WRQ_SIZE  64
 #define ACK_SIZE	4
-#define DATA_P_FULL 516
 		
 struct R_Wrq_pkt{
 		uint16_t Opcode;
