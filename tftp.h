@@ -36,14 +36,10 @@ void  serializza_R_Wrq_pkt(char* buf,struct R_Wrq_pkt* rw){
 		//non include il fine stringa 
 		int next = 2+(strlen(rw->filename)+1);
 		
-		buf[next] = 0X00;		
-		
-		next++;		
-
 		strcpy(&buf[next],rw->mode);
 		next = next+(strlen(rw->mode)+1)+1;
 
-		buf[next] =0x00;
+
 }
 
 void  deserializza_R_Wrq_pkt(char* buf,struct R_Wrq_pkt* rw){
@@ -54,10 +50,10 @@ void  deserializza_R_Wrq_pkt(char* buf,struct R_Wrq_pkt* rw){
 	strcpy(rw->filename,&buf[2]);
 	
 	//next = inizio stringa mode(txt o bin)
-	//pos inizio filename  lung filename + \0	byte a 0X00
-	//     |						|				|
-	//	   V						V				V
-	next = 2 	+		(strlen(rw->filename)+1) +  1;
+	//pos inizio filename  lung filename + \0	
+	//     |						|				
+	//	   V						V				
+	next = 2 	+		(strlen(rw->filename)+1);
 
 	strcpy(rw->mode,&buf[next]);
 	printf("rw->mode = %s\n",rw->mode);
@@ -171,9 +167,9 @@ int  serializza_Err_pkt(char* buf,struct Err_pkt* er){
 		len = strlen(&buf[4])+1;
 
 		int quanti = 2*sizeof(uint16_t)+len;
-		buf[quanti]=0X00;
+
 		
-		return quanti+1 ;
+		return quanti;
 };
 
 void deserializza_err_pkt(struct Err_pkt* er,char* buf){
@@ -187,9 +183,8 @@ void deserializza_err_pkt(struct Err_pkt* er,char* buf){
 	
 	er->Err_Numb = nh;
 	
-	int i;
-	for(i=0;buf[i+4]!=0X00;i++)
-		er->Err_Msg[i]=buf[i+4];
+
+	strcpy(er->Err_Msg,&buf[4]);
 	
 	
 

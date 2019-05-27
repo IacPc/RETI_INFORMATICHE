@@ -14,7 +14,9 @@ int main(int argc, char* argv[]){
 	int tot=0;
 	
     struct sockaddr_in srv_addr;// my_addr;
-	struct arg_get ag;
+	struct arg_get ag;	//argomento da passare al thread
+
+	strcpy(ag.mode,"octet\0");	//modalità predefinita trasferinto binario
 
 
 
@@ -76,6 +78,7 @@ int main(int argc, char* argv[]){
 			printf("!help --> mostra l'elenco dei comandi disponibili\n");
 
 			printf("!mode{txt|bin} --> imposta il modo di trasferimento dei files (testo o binario)\n");
+
 			printf("!get filename nome_locale --> richiede al server il nome del <filename> e lo salva localment con il nome <nome_locale>\n");
 
 			printf("!quit --> termina il client\n");

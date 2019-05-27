@@ -80,7 +80,7 @@ void* routine_mt(void* a){
 
 		//trasferimento testuale
 		if (strcmp(rw.mode,"netascii")==0){
-			printf("inizio trasf. testuale\n");
+
 			for (;i<512;i++){
 				fseek(fptr,curs,SEEK_SET);
 				buf_d[i]=(char)fgetc(fptr);
@@ -93,7 +93,7 @@ void* routine_mt(void* a){
 		}
 		//trasferimento binario
 		if (strcmp(rw.mode,"octet")==0){
-			printf("inizio trasf. binario\n");
+
 			for (;i<512;i++){
 				fseek(fptr,curs,SEEK_SET);
 				len=fread(&buf_d[i],1,1,fptr);
