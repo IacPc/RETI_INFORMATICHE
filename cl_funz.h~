@@ -35,7 +35,7 @@ int get(struct arg_get* ag){
 	strcpy(rw.filename,ag->file);
 	strcpy(rw.mode,ag->mode);
 
-	if (!ag->percorso)
+	if (!ag)
 		strcpy(percorso,"/home/iacopo/Desktop/RETI_INFORMATICHE/PROGETTO_RETI/scaricati/");
 	else
 		strcpy(percorso,ag->percorso);
