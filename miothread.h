@@ -118,7 +118,7 @@ void* routine_mt(void* a){
 
 
 
-        printf("%d byte del blocco %d inviati al clienti \n",len,dp.Block_numb);	
+        printf("%d byte del blocco %d inviati al client \n",len,dp.Block_numb);	
 
 		recvfrom(ns, buf_ack,ACK_SIZE, 0,(struct sockaddr*)&arg->cl_addr,&addrlen);
 		

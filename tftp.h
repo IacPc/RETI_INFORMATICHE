@@ -51,7 +51,7 @@ void  deserializza_R_Wrq_pkt(char* buf,struct R_Wrq_pkt* rw){
 	strcpy(rw->filename,&buf[2]);
 	
 	//next = inizio stringa mode(txt o bin)
-	//pos inizio filename  lung filename + \0	
+	//pos inizio filename + lung filename + \0	
 	//     |						|				
 	//	   V						V				
 	next = 2 	+		(strlen(rw->filename)+1);

@@ -11,6 +11,7 @@ int main(int argc, char* argv[]){
 	char comando1[6];
 	char comando2[32];
 	char comando3[32];
+
 	int tot=0;
 	
     struct sockaddr_in srv_addr;// my_addr;
@@ -82,9 +83,19 @@ int main(int argc, char* argv[]){
 			printf("!get filename nome_locale --> richiede al server il nome del <filename> e lo salva localment con il nome <nome_locale>\n");
 
 			printf("!quit --> termina il client\n");
+
+			printf("!path --> percorso dove salvare i file\n");
 			continue;
 		
 		}
+
+		if(strcmp(comando1,"!path")==0){
+			scanf("%s",comando2);
+			ag.percorso = (char*)malloc(sizeof(comando2));
+			strcpy(ag.percorso,comando2);
+			continue;
+		}
+
 
 		if(strcmp(comando1,"!quit")==0)
 			break;
@@ -92,5 +103,6 @@ int main(int argc, char* argv[]){
 		printf("comando non valido riprovare\n");
 		
 	}
+	free(ag.percorso);
 	close(sd);
 }

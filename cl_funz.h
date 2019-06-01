@@ -7,6 +7,7 @@ struct arg_get{
 	int sd;
 	char file[32];
 	char nome[32];
+	char* percorso;
 };
 
 
@@ -34,6 +35,13 @@ int get(struct arg_get* ag){
 	strcpy(rw.filename,ag->file);
 	strcpy(rw.mode,ag->mode);
 
+	if (!ag)
+		strcpy(percorso,"/home/iacopo/Desktop/RETI_INFORMATICHE/PROGETTO_RETI/scaricati/");
+	else
+		strcpy(percorso,ag->percorso);
+
+	strcat(percorso,ag->nome);
+
 	dp.Data = (char*)malloc(512);
 	if(!dp.Data)
 		exit(0); 
@@ -51,8 +59,7 @@ int get(struct arg_get* ag){
 	}
 	printf("richiesta al server inviata\n");
 	//ASPETTO IL PACCHETTO DATI
-	strcpy(percorso,"/home/iacopo/Desktop/RETI_INFORMATICHE/PROGETTO_RETI/scaricati/");
-	strcat(percorso,ag->nome);
+	
 
 
 	while(1){
