@@ -10,16 +10,12 @@ int main(int argc, char* argv[]){
 	char porta[4];	
 	char comando1[6];
 	char comando2[32];
-	char comando3[32];
+	char comando3[64];
 
 	int tot=0;
 	
     struct sockaddr_in srv_addr;// my_addr;
 	struct arg_get ag;	//argomento da passare al thread
-
-	strcpy(ag.mode,"octet\0");	//modalità predefinita trasferinto binario
-
-
 
 	sd = socket(AF_INET,SOCK_DGRAM,0);
     
@@ -35,6 +31,14 @@ int main(int argc, char* argv[]){
     srv_addr.sin_port = htons(atoi(porta));
     inet_pton(AF_INET, ip_ser, &srv_addr.sin_addr);
 
+	//inizializzo parametro per la get
+	
+	strcpy(ag.mode,"octet\0");	//modalità predefinita trasferinto binario
+	ag.percorso_loc= NULL;		//dove salvo i file scaricati
+	ag.sd = sd;					//socket per la comunicazione
+	ag.srv_addr= srv_addr;
+
+
 	printf("digitare help per i comandi disponibili:\n");
 
 	while(1){
@@ -43,11 +47,11 @@ int main(int argc, char* argv[]){
 
 		if(strcmp(comando1,"!get")==0){
 			scanf("%s %s",comando2,comando3);
-			ag.srv_addr= srv_addr;	
+
 			ag.sd=sd;
 			strcpy(ag.file,comando2);
-			strcpy(ag.nome,comando3);	
-
+			ag.percorso_loc = malloc(sizeof(comando3));
+			strcpy(ag.percorso_loc,comando3);
 			tot =get(&ag);	
 		
 			printf("scaricati %d byte\n",tot);
@@ -84,18 +88,10 @@ int main(int argc, char* argv[]){
 
 			printf("!quit --> termina il client\n");
 
-			printf("!path --> percorso dove salvare i file\n");
+
 			continue;
 		
 		}
-
-		if(strcmp(comando1,"!path")==0){
-			scanf("%s",comando2);
-			ag.percorso = (char*)malloc(sizeof(comando2));
-			strcpy(ag.percorso,comando2);
-			continue;
-		}
-
 
 		if(strcmp(comando1,"!quit")==0)
 			break;
@@ -104,6 +100,6 @@ int main(int argc, char* argv[]){
 		
 	}
 
-	free(ag.percorso);
+	free(ag.percorso_loc);
 	close(sd);
 }

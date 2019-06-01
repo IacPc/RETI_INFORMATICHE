@@ -6,16 +6,19 @@ struct arg_get{
 	struct sockaddr_in srv_addr;
 	int sd;
 	char file[32];
-	char nome[32];
-	char* percorso;
+	char* percorso_loc;
 };
 
 
 int get(struct arg_get* ag){
 
 	int ret;
+	//numero di blocco iniziale =1 come previsto da rfc 1350 pag 4
 	int bn=1;
+
+	//totale byte ricevuti dal server
 	int tot=0;
+
 	int da_inviare;
 	uint16_t opc;
 	socklen_t addrlen= sizeof(ag->srv_addr);
@@ -31,21 +34,19 @@ int get(struct arg_get* ag){
 	char percorso[128];
 	char buf_ack[ACK_SIZE];
 
-	rw.Opcode = RRQ_OPC;
-	strcpy(rw.filename,ag->file);
-	strcpy(rw.mode,ag->mode);
 
-	if (!ag->percorso)
-		strcpy(percorso,"/home/iacopo/Desktop/RETI_INFORMATICHE/PROGETTO_RETI/scaricati/");
-	else
-		strcpy(percorso,ag->percorso);
 
-	strcat(percorso,ag->nome);
+	strcpy(percorso,ag->percorso_loc);
+
+	strcat(percorso,ag->file);
 
 	dp.Data = (char*)malloc(512);
 	if(!dp.Data)
 		exit(0); 
 
+	rw.Opcode = RRQ_OPC;
+	strcpy(rw.filename,ag->file);
+	strcpy(rw.mode,ag->mode);
 
 	da_inviare=serializza_R_Wrq_pkt(buf,&rw);
 
@@ -59,7 +60,6 @@ int get(struct arg_get* ag){
 	}
 	printf("richiesta al server inviata\n");
 	//ASPETTO IL PACCHETTO DATI
-	
 
 
 	while(1){
