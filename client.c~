@@ -103,6 +103,7 @@ int main(int argc, char* argv[]){
 		printf("comando non valido riprovare\n");
 		
 	}
+
 	free(ag.percorso);
 	close(sd);
 }
