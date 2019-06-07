@@ -10,12 +10,15 @@ int main(int argc, char* argv[]){
 	char porta[4];	
 	char comando1[6];
 	char comando2[32];
-	char comando3[64];
-
+	char comando3[32];
 	int tot=0;
 	
     struct sockaddr_in srv_addr;// my_addr;
 	struct arg_get ag;	//argomento da passare al thread
+
+	strcpy(ag.mode,"octet\0");	//modalità predefinita trasferinto binario
+
+
 
 	sd = socket(AF_INET,SOCK_DGRAM,0);
     
@@ -31,14 +34,6 @@ int main(int argc, char* argv[]){
     srv_addr.sin_port = htons(atoi(porta));
     inet_pton(AF_INET, ip_ser, &srv_addr.sin_addr);
 
-	//inizializzo parametro per la get
-	
-	strcpy(ag.mode,"octet\0");	//modalità predefinita trasferinto binario
-	ag.percorso_loc= NULL;		//dove salvo i file scaricati
-	ag.sd = sd;					//socket per la comunicazione
-	ag.srv_addr= srv_addr;
-
-
 	printf("digitare help per i comandi disponibili:\n");
 
 	while(1){
@@ -47,13 +42,15 @@ int main(int argc, char* argv[]){
 
 		if(strcmp(comando1,"!get")==0){
 			scanf("%s %s",comando2,comando3);
-
+			ag.srv_addr= srv_addr;	
 			ag.sd=sd;
 			strcpy(ag.file,comando2);
-			ag.percorso_loc = malloc(sizeof(comando3));
-			strcpy(ag.percorso_loc,comando3);
+			ag.locale= (char*)malloc(sizeof(comando3)+1);
+			strcpy(ag.locale,comando3);
+
+			
 			tot =get(&ag);	
-		
+			free((void*)ag.locale);
 			printf("scaricati %d byte\n",tot);
 			continue;
 		}
@@ -87,8 +84,6 @@ int main(int argc, char* argv[]){
 			printf("!get filename nome_locale --> richiede al server il nome del <filename> e lo salva localment con il nome <nome_locale>\n");
 
 			printf("!quit --> termina il client\n");
-
-
 			continue;
 		
 		}
@@ -100,6 +95,5 @@ int main(int argc, char* argv[]){
 		
 	}
 
-	free(ag.percorso_loc);
 	close(sd);
 }

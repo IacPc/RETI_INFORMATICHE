@@ -79,7 +79,7 @@ int main(int argc, char** argv){
 
 		//lettura opcode
 		memcpy(&opc,buf_rq,2);
-
+		opc=ntohs(opc);
 		switch(opc){
 		
 			case(RRQ_OPC):
