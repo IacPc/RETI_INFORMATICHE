@@ -12,7 +12,7 @@ struct arg_mt{
 	pthread_t* pt;
 
 	char cartella[64]; // contiene la destinazioen in cui cercare il file
-	char buf_rq[R_WRQ_SIZE];
+	struct R_Wrq_pkt rw;
 };
 
 void* routine_mt(void* a){
@@ -30,7 +30,7 @@ void* routine_mt(void* a){
 
 	socklen_t addrlen;
 
-	struct R_Wrq_pkt rw;
+
 	struct ACK_pkt 	 ack; 
 	struct Data_pkt  dp;
 	struct Err_pkt	 er;
@@ -39,11 +39,6 @@ void* routine_mt(void* a){
 	
 
 	FILE *fptr;
-
-	//deserializza un pacchetto di tipo richiesta di lettura
-	//definito in tftp.h
-	deserializza_R_Wrq_pkt(arg->buf_rq,&rw);
-
 	
 	addrlen = sizeof(arg->cl_addr);
 	
@@ -53,8 +48,9 @@ void* routine_mt(void* a){
 
 	strcpy(buf_dest,arg->cartella);
 
-	strcat(buf_dest,rw.filename);
+	//strcat(buf_dest,arg->rw.filename);
 	printf("cerco il file:%s\n",buf_dest);
+	dp.Data =(char*)malloc(DATA_P_FULL);
 	
 	if ((fptr = fopen(buf_dest, "r")) == NULL){
 
@@ -71,7 +67,7 @@ void* routine_mt(void* a){
     }		
 
 
-	dp.Data =(char*)malloc(DATA_P_FULL);
+
 
 	while(1){
 
@@ -79,7 +75,7 @@ void* routine_mt(void* a){
 		int i=0;
 
 		//trasferimento testuale
-		if (strcmp(rw.mode,"netascii")==0){
+		if (strcmp(arg->rw.mode,"netascii")==0){
 
 			for (;i<512;i++){
 				fseek(fptr,curs,SEEK_SET);
@@ -92,7 +88,7 @@ void* routine_mt(void* a){
 			}
 		}
 		//trasferimento binario
-		if (strcmp(rw.mode,"octet")==0){
+		if (strcmp(arg->rw.mode,"octet")==0){
 
 			for (;i<512;i++){
 				fseek(fptr,curs,SEEK_SET);
@@ -127,7 +123,7 @@ void* routine_mt(void* a){
 		printf("ricevuto ack blocco numero:%d\n",ack.Block_numb);
 		
 
-		if(ultimo){
+		if(ultimo|| i<512){
 			rewind(fptr);
 			break;	
 		}

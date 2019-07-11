@@ -47,9 +47,13 @@ void  deserializza_R_Wrq_pkt(char* buf,struct R_Wrq_pkt* rw){
 	int next;	
 
 	memcpy(&rw->Opcode,buf,2);
-	rw->Opcode= ntohs(rw->Opcode);	
-	strcpy(rw->filename,&buf[2]);
-	
+	rw->Opcode=ntohs(rw->Opcode);
+
+	//strcpy(rw->filename,&buf[3]);
+	int i =2;
+	for(;strcmp(&buf[i],"\0")!=0;i++)
+		rw->filename[i-2]=buf[i];
+	rw->filename[i-2]=buf[i];
 	//next = inizio stringa mode(txt o bin)
 	//pos inizio filename + lung filename + \0	
 	//     |						|				
@@ -57,14 +61,14 @@ void  deserializza_R_Wrq_pkt(char* buf,struct R_Wrq_pkt* rw){
 	next = 2 	+		(strlen(rw->filename)+1);
 
 	strcpy(rw->mode,&buf[next]);
-	printf("rw->mode = %s\n",rw->mode);
+	printf("rw->filename in tftp.h= %s\n",rw->filename);
 }
 
 struct Data_pkt{
 
-		uint16_t Opcode;
-		uint16_t Block_numb;
-		char* Data;
+	uint16_t Opcode;
+	uint16_t Block_numb;
+	char* Data;
 
 };
 
@@ -72,7 +76,8 @@ struct Data_pkt{
 
 int  serializza_Data_pkt(char* buf,struct Data_pkt* dp,int len){
 	
-		uint16_t n_op=htons(dp->Opcode);
+		uint16_t n_op=dp->Opcode;
+
 		memcpy(buf,&n_op,sizeof(n_op));
 				
 		
@@ -92,7 +97,7 @@ void  deserializza_Data_pkt(char* buf,struct Data_pkt* dp,int l){
 
 		memcpy(&n_op,buf,2);
 		dp->Opcode = n_op;
-		dp->Opcode=ntohs(dp->Opcode);
+		
 		memcpy(&n_op,&buf[2],2);
 		dp->Block_numb = n_op;
 		memcpy(dp->Data,&buf[4],l-4);
@@ -134,7 +139,7 @@ void  deserializza_ACK_pkt(char* buf,struct ACK_pkt* ack){
 
 
 void costruisci_ack_pkt(struct ACK_pkt* ack,int bn){
-	ack->Opcode=htons(ACK_OPC);
+	ack->Opcode=ACK_OPC;
 	ack->Block_numb= bn;
 
 }
@@ -155,7 +160,6 @@ int  serializza_Err_pkt(char* buf,struct Err_pkt* er){
 
 		uint16_t n_op=er->Opcode;
 		int len=0;
-		n_op=htons(n_op);
 		memcpy(buf,&n_op,sizeof(n_op));
 		memcpy(&buf[2],&er->Err_Numb,sizeof(n_op));
 		if(er->Err_Numb==0X0001){
@@ -178,7 +182,7 @@ void deserializza_err_pkt(struct Err_pkt* er,char* buf){
 	uint16_t nh;
 	memcpy(&nh,&buf[0],2);
 	
-	er->Opcode = ntohs(nh);
+	er->Opcode = nh;
 
 	memcpy(&nh,&buf[2],2);
 	

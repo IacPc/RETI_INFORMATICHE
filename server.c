@@ -11,7 +11,7 @@ int main(int argc, char** argv){
 	struct arg_mt* arg;
 	struct sockaddr_in cl_addr, my_addr;
 	struct Err_pkt er;
-
+	struct R_Wrq_pkt rw2;
 
 	uint16_t opc;
 	int pid; //id porta
@@ -23,23 +23,15 @@ int main(int argc, char** argv){
     // Creazione socket 
     sd = socket(AF_INET, SOCK_DGRAM, 0);
 	
-	pid=69; //numero predefinito per tftp
+	pid=69; //numero di porta predefinito per tftp
 
 	// assegnazione valori di defult in caso
 	// di mancata assegnazione dall'utente 
-	if(argc<3){
-		if(argc==2)
-			pid=atoi(argv[1]);
-		strcpy(percorso,"/home/iacopo/Desktop/RETI_INFORMATICHE/PROGETTO_RETI/esempi/\0");
-	}
-	else{
-		pid=atoi(argv[1]);
-		strcpy(percorso,(char*)(argv[2]));
-	}
 
-	if(pid==69)
-		printf("attenzione,il server è in ascolto sulla porta 69 potrebbero essere necessari permessi di superutente\n");
+	pid=atoi(argv[1]);
+	strcpy(percorso,(char*)(argv[2]));
 
+	
 
     memset(&cl_addr, 0, sizeof(cl_addr));  
     memset(&my_addr, 0, sizeof(my_addr));
@@ -79,21 +71,31 @@ int main(int argc, char** argv){
 
 		//lettura opcode
 		memcpy(&opc,buf_rq,2);
-		opc=ntohs(opc);
+		
 		switch(opc){
 		
 			case(RRQ_OPC):
 				printf("ricevuta richiesta di lettura File system\n");
 				
+				printf("nome:");
+				for(int i=2;i<20;i++)
+					printf("%c",buf_rq[i]);
+				printf("\n");
+
 				//inizializzo argomenti da passare al thread
 				//struttura arg definita in miothread.h
-				arg = (struct arg_mt*)malloc(sizeof(struct arg_mt));	
-				memcpy(arg->buf_rq,buf_rq,R_WRQ_SIZE);					
+				arg = (struct arg_mt*)malloc(sizeof(struct arg_mt));
+	
+				deserializza_R_Wrq_pkt(buf_rq,&rw2);
+			
 				arg->cl_addr=cl_addr;
 				strcpy(arg->cartella,percorso);
-
+		
 				pt = (pthread_t*)malloc(sizeof(pthread_t));
 				arg->pt=pt;
+				strcpy(arg->rw.mode,rw2.mode);
+				strcpy(arg->rw.filename,rw2.filename);
+				
 				pid= pthread_create(pt,NULL,routine_mt,(void*)arg);
 
 
