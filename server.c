@@ -23,10 +23,10 @@ int main(int argc, char** argv){
     // Creazione socket 
     sd = socket(AF_INET, SOCK_DGRAM, 0);
 	
-	pid=69; //numero di porta predefinito per tftp
-
-	// assegnazione valori di defult in caso
-	// di mancata assegnazione dall'utente 
+	if(argc<3){
+    	printf("inserire argomenti obbligatori\n");
+    	return;
+    }
 
 	pid=atoi(argv[1]);
 	strcpy(percorso,(char*)(argv[2]));

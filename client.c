@@ -19,6 +19,11 @@ int main(int argc, char* argv[]){
 
 	sd = socket(AF_INET,SOCK_DGRAM,0);
     
+    if(argc<3){
+    	printf("inserire argomenti obbligatori\n");
+    	return;
+    }
+
     /* Creazione indirizzo di bind */
 	strncpy(ip_ser,argv[1],4);
 	strncpy(porta,argv[2],4);
